@@ -14,9 +14,9 @@ contract PurchaseDelegatorTest is Test {
   function testSetup() public {
     uint256 quantity = 1;
     bytes32[3] memory data;
-    uint256 price = 0.00666 ether;
+    uint256 price = 0.00256 ether;
     string memory comment = "hello";
     address referral = 0x0000000000000000000000000000000000001337;
-    pd.setup{value: price + ZORA_MINT_FEE}(quantity, data, comment, referral);
+    pd.setup{value: price}(quantity, data, comment, referral);
   }
 }
