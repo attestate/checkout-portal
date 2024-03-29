@@ -39,7 +39,7 @@ contract PurchaseDelegator {
     address referral
   ) external payable {
     uint256 price = getPrice();
-    if (price != msg.value) revert ErrValue();
+    if (msg.value < price) revert ErrValue();
 
     IERC721Drop collection = IERC721Drop(collectionLocation);
     Delegator2 delegator2 = Delegator2(delegator2Location);
