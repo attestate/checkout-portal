@@ -45,6 +45,6 @@ contract PurchaseDelegator {
     Delegator2 delegator2 = Delegator2(delegator2Location);
     collection.adminMint(msg.sender, quantity);
     delegator2.etch(data);
-    kiwiTreasury.call{value: price}("");
+    kiwiTreasury.call{value: msg.value}("");
   }
 }
