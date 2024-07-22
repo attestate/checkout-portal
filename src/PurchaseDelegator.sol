@@ -25,6 +25,10 @@ interface Delegator2 {
   function etch(bytes32[3] calldata data) external;
 }
 
+interface Disperse {
+  function disperseEther(address[] recipients, uint256[] values) external payable;
+}
+
 address constant kiwiTreasury = 0x1337E2624ffEC537087c6774e9A18031CFEAf0a9;
 contract PurchaseDelegator {
   error ErrValue();
@@ -32,11 +36,21 @@ contract PurchaseDelegator {
     IERC721Drop collection = IERC721Drop(collectionLocation);
     return collection.saleDetails().publicSalePrice;
   }
+  function invite(address payable recipient) external payable {
+    uint256 price = getPrice();
+    if (msg.value < price) revert ErrValue();
+
+    IERC721Drop collection = IERC721Drop(collectionLocation);
+    uint256 quantity = 1;
+    collection.adminMint(recipient, quantity);
+
+    uint256 funding = 0.00003 ether;
+    kiwiTreasury.call{value: msg.value-funding}("");
+    recipient.call{value: funding}("");
+  }
   function setup(
     uint256 quantity,
-    bytes32[3] calldata data,
-    string calldata comment,
-    address referral
+    bytes32[3] calldata data
   ) external payable {
     uint256 price = getPrice();
     if (msg.value < price) revert ErrValue();
