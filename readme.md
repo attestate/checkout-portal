@@ -3,6 +3,11 @@
 The checkout portal contract enables buying a Kiwi NFT and delegating your
 device's key at the same time
 
+## Development
+
+This contract relies on the existence of third-party contracts on Optimism.
+Hence it is crucial to use `forge test -f` for the tests to pass.
+
 ## Deployment
 
 - CREATE2 is used to deploy delegator2 to a deterministic address independent
