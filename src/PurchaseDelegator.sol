@@ -24,13 +24,6 @@ address constant delegator2Location = 0x08b7ECFac2c5754ABafb789c84F8fa37c9f088B0
 interface Delegator2 {
   function etch(bytes32[3] calldata data) external;
 }
-address constant disperseLocation = 0xD152f549545093347A162Dce210e7293f1452150;
-interface Disperse {
-  function disperseEther(
-    address[] calldata recipients,
-    uint256[] calldata values
-  ) external payable;
-}
 address constant kiwiTreasury = 0x1337E2624ffEC537087c6774e9A18031CFEAf0a9;
 contract PurchaseDelegator {
   error ErrValue();
@@ -40,8 +33,8 @@ contract PurchaseDelegator {
   }
   function setup(
     bytes32[3] calldata data,
-    address[] calldata recipients,
-    uint256[] calldata values
+    address[] calldata beneficiaries,
+    uint256[] calldata amounts
   ) external payable {
     uint256 price = getPrice();
     if (msg.value < price) revert ErrValue();
@@ -57,11 +50,13 @@ contract PurchaseDelegator {
 
     uint256 remainder = msg.value - price;
     if (remainder > 0) {
-      Disperse disperse = Disperse(disperseLocation);
-      disperse.disperseEther{value: remainder}(
-        recipients,
-        values
-      );
+      for (uint256 i = 0; i < beneficiaries.length; i++) {
+        payable(beneficiaries[i]).transfer(amounts[i]);
+      }
+      uint256 balance = address(this).balance;
+      if (balance > 0) {
+        payable(msg.sender).transfer(balance);
+      }
     }
   }
 }
