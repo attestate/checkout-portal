@@ -10,7 +10,7 @@ Hence it is crucial to use `forge test -f` for the tests to pass.
 
 ## Deployment
 
-- CREATE2 is used to deploy delegator2 to a deterministic address independent
+- CREATE2 is used to deploy the contract to a deterministic address independent
   of chainId.
 - `DEPLOYER`: 0x0000000000ffe8b47b3e2130213b802212439497
 - `SALT`: 0x0000000000000000000000000000000000000000f00df00df00df00df00df00d
